@@ -1,0 +1,57 @@
+// Modelo undimotriz con motor DC (para OpenSCAD)
+// Exporta a .STL e importa en Tinkercad
+
+$fn = 64;          // Suaviza curvas
+
+// Módulos básicos
+module boya() {
+  color("yellow")
+    translate([0, 0, 35])
+      cylinder(h = 20, r = 20);
+}
+
+module base() {
+  color("darkblue")
+    translate([0, 0, 0])
+      cylinder(h = 10, r = 30);
+}
+
+module hinge_pin() {
+  color("silver")
+    cylinder(h = 10, r = 2);
+}
+
+module brazo() {
+  color("lightgray")
+    cube([80, 5, 5], center = true);
+}
+
+module motor() {
+  color("red")
+    translate([0, 0, 7.5])
+      cylinder(h = 15, r = 4);
+}
+
+// Ensamblaje
+module undimotriz() {
+  // 1) Base en z=0..10
+  base();
+  // 2) Pasador de bisagra en z=10..20
+  translate([0, 0, 10])
+    hinge_pin();
+  // 3) Brazo y motor girando 45° alrededor del pasador
+  translate([0, 0, 10])
+    rotate([45, 0, 0]) {
+      // Brazo (centrado en el pasador)
+      translate([40, 2.5, 0])
+        brazo();
+      // Motor en extremo del brazo
+      translate([80, 0, 0])
+        motor();
+    }
+  // 4) Boya conectada al pasador
+  boya();
+}
+
+// Llamada final
+undimotriz();
